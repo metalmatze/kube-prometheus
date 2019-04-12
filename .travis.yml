@@ -16,9 +16,6 @@ services:
 
 jobs:
   include:
-  - stage: Sanity check and tests
   - script: make --always-make generate-in-docker && git diff --exit-code
-  # Check generated contents are up to date and code is formatted.
   - script: make test-in-docker
-  # kube-prometheus e2e tests
   - script: ./tests/e2e/travis-e2e.sh
