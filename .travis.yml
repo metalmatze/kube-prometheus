@@ -1,21 +1,23 @@
 sudo: required
 dist: xenial
 language: go
+
 go:
 - "1.11.x"
 go_import_path: github.com/coreos/kube-prometheus
+
 cache:
   directories:
   - $GOCACHE
   - $GOPATH/pkg/mod
+
 services:
 - docker
-before_install:
-  - pip install --user awscli
-  - export PATH=$PATH:$HOME/.local/bin
+
 jobs:
   include:
   - stage: Sanity check and tests
+  - script: make --always-make generate-in-docker && git diff --exit-code
   # Check generated contents are up to date and code is formatted.
   - script: make test-in-docker
   # kube-prometheus e2e tests
