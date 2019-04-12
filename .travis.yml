@@ -3,7 +3,7 @@ dist: xenial
 language: go
 
 go:
-- "1.11.x"
+- "1.12.x"
 go_import_path: github.com/coreos/kube-prometheus
 
 cache:
@@ -18,4 +18,4 @@ jobs:
   include:
   - script: make --always-make generate-in-docker && git diff --exit-code
   - script: make --always-make test-in-docker
-  - script: ./tests/e2e/travis-e2e.sh
+  - script: GO111MODULE=on ./tests/e2e/travis-e2e.sh
