@@ -5,14 +5,14 @@ EMBEDMD_BINARY:=$(GOPATH)/bin/embedmd
 
 all: generate fmt test
 
-../../hack/jsonnet-docker-image: ../../scripts/jsonnet/Dockerfile
+hack/jsonnet-docker-image: scripts/jsonnet/Dockerfile
 # Create empty target file, for the sole purpose of recording when this target
 # was last executed via the last-modification timestamp on the file. See
 # https://www.gnu.org/software/make/manual/make.html#Empty-Targets
-	docker build -f - -t po-jsonnet . < ../../scripts/jsonnet/Dockerfile
+	docker build -f - -t po-jsonnet . < scripts/jsonnet/Dockerfile
 	touch $@
 
-generate-in-docker: ../../hack/jsonnet-docker-image
+generate-in-docker: hack/jsonnet-docker-image
 	@echo ">> Compiling assets and generating Kubernetes manifests"
 	docker run \
 	--rm \
@@ -46,7 +46,7 @@ test: $(JB_BINARY)
 test-e2e:
 	go test -timeout 55m -v ./tests/e2e -count=1
 
-test-in-docker: ../../hack/jsonnet-docker-image
+test-in-docker: hack/jsonnet-docker-image
 	@echo ">> Compiling assets and generating Kubernetes manifests"
 	docker run \
 	--rm \
