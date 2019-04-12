@@ -51,7 +51,7 @@ test-in-docker: hack/jsonnet-docker-image
 	docker run \
 	--rm \
 	-u=$(shell id -u $(USER)):$(shell id -g $(USER)) \
-	-v $(shell dirname $(dir $(abspath $(dir $$PWD)))):/go/src/github.com/coreos/kube-prometheus/ \
+	-v $$PWD:/go/src/github.com/coreos/kube-prometheus/ \
 	-v $(shell go env GOCACHE):/.cache/go-build \
 	--workdir /go/src/github.com/coreos/kube-prometheus \
 	po-jsonnet make test

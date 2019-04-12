@@ -17,5 +17,5 @@ services:
 jobs:
   include:
   - script: make --always-make generate-in-docker && git diff --exit-code
-  - script: make test-in-docker
+  - script: make --always-make test-in-docker
   - script: ./tests/e2e/travis-e2e.sh
