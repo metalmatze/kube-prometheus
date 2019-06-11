@@ -317,6 +317,23 @@ spec:
           )
         ) by (node)
       record: 'node:node_inodes_free:'
+  - name: slo.rules
+    rules:
+    - expr: |
+        histogram_quantile(0.50, sum(rate(prometheus_http_request_duration_seconds_bucket{namespace="monitoring"}[5m])) by (le))
+      labels:
+        quantile: "0.50"
+      record: prometheus_http_request_duration_seconds:histogram_quantile
+    - expr: |
+        histogram_quantile(0.90, sum(rate(prometheus_http_request_duration_seconds_bucket{namespace="monitoring"}[5m])) by (le))
+      labels:
+        quantile: "0.90"
+      record: prometheus_http_request_duration_seconds:histogram_quantile
+    - expr: |
+        histogram_quantile(0.99, sum(rate(prometheus_http_request_duration_seconds_bucket{namespace="monitoring"}[5m])) by (le))
+      labels:
+        quantile: "0.99"
+      record: prometheus_http_request_duration_seconds:histogram_quantile
   - name: kube-prometheus-node-recording.rules
     rules:
     - expr: sum(rate(node_cpu_seconds_total{mode!="idle",mode!="iowait"}[3m])) BY
@@ -845,6 +862,26 @@ spec:
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubeclientcertificateexpiration
       expr: |
         apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 86400
+      labels:
+        severity: critical
+  - name: slo.alerts
+    rules:
+    - alert: PrometheuesHighLatency
+      annotations:
+        message: The Prometheus server has a 99th percentile latency of {{ $value
+          }} seconds.
+      expr: |
+        prometheus_http_request_duration_seconds:histogram_quantile{quantile="0.99"}, > 0.100
+      for: 1m
+      labels:
+        severity: warning
+    - alert: PrometheuesHighLatency
+      annotations:
+        message: The Prometheus server has a 99th percentile latency of {{ $value
+          }} seconds.
+      expr: |
+        prometheus_http_request_duration_seconds:histogram_quantile{quantile="0.99"}, > 0.150
+      for: 1m
       labels:
         severity: critical
   - name: alertmanager.rules

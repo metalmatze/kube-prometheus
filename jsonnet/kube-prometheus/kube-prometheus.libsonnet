@@ -10,6 +10,7 @@ local configMapList = k3.core.v1.configMapList;
 (import 'prometheus/prometheus.libsonnet') +
 (import 'prometheus-adapter/prometheus-adapter.libsonnet') +
 (import 'kubernetes-mixin/mixin.libsonnet') +
+(import 'slo-mixin/mixin.libsonnet') +
 (import 'alerts/alerts.libsonnet') +
 (import 'rules/rules.libsonnet') + {
   kubePrometheus+:: {

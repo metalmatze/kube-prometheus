@@ -72,6 +72,9 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/pods
           name: grafana-dashboard-pods
           readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/prometheus-slo
+          name: grafana-dashboard-prometheus-slo
+          readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/statefulset
           name: grafana-dashboard-statefulset
           readOnly: false
@@ -120,6 +123,9 @@ spec:
       - configMap:
           name: grafana-dashboard-pods
         name: grafana-dashboard-pods
+      - configMap:
+          name: grafana-dashboard-prometheus-slo
+        name: grafana-dashboard-prometheus-slo
       - configMap:
           name: grafana-dashboard-statefulset
         name: grafana-dashboard-statefulset
